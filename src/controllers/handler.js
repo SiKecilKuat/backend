@@ -8,24 +8,7 @@ const connection = mysql.createConnection({
     database: process.env.MYSQL_DATABASE,
   });
 
-const addSleepLogsHandler = (req, res) => {
-    try{
-        const { childId } = req.params;
-        //const dtcreated = new Date().toISOString().slice(0, 19);
-        const { duration } = req.body;
-        connection.query('INSERT INTO sleep_log (child_id, duration) VALUES (?, ?)',
-        [childId, duration]);
-        res.status(201).json({
-            id: childId,
-            message: 'sleep log successfuly created'
-        });
-    }
-    catch (error){
-        res.status(500).json({
-            error: 'Internal server error'
-        });
-    }
-}
+// Food log Handlers
 
 const addFoodIntakeLogsHandler = (req, res) => {
     try {
@@ -45,40 +28,141 @@ const addFoodIntakeLogsHandler = (req, res) => {
     }
 }
 
-const getSleepLogHandler = (req, res) => {
-    try {
-
-    }
-    catch (error){
-
-    }
-}
-
 const getFoodIntakeLogsHandler = (req, res) => {
     try {
-
-    }
-    catch (error){
-
+        const { childId } = req.params;
+        connection.query(
+            'SELECT * FROM food_intake_log WHERE child_id = ?',
+            [childId],
+            (error, results) => {
+                if (error) {
+                    res.status(500).json({ error: 'Database error' });
+                } else if (results.length === 0) {
+                    res.status(404).json({ error: 'Food intake log not found' });
+                } else {
+                    res.status(200).json({
+                        id: childId,
+                        data: results,
+                    });
+                }
+            }
+        );
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 
-
-const addTestHandler = (req, res) => {
+const getFoodIntakeLogsByIdHandler = (req, res) => {
     try {
-        const nama = req.body.nama;
-        res.status(200).send('ok')
-        const result = connection.query('INSERT INTO test (nama) VALUES (?)', nama);
-        // console.log(result)
+        const { childId, logId } = req.params;
+        connection.query(
+            'SELECT * FROM food_intake_log WHERE child_id = ? AND log_id = ?',
+            [childId, logId],
+            (error, results) => {
+                if (error) {
+                    res.status(500).json({ error: 'Database error' });
+                } else if (results.length === 0) {
+                    res.status(404).json({ error: 'Food intake log not found' });
+                } else {
+                    res.status(200).json({
+                        id: childId,
+                        data: results,
+                    });
+                }
+            }
+        );
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+// Sleep log Handlers
+
+const addSleepLogsHandler = (req, res) => {
+    try{
+        const { childId } = req.params;
+        //const dtcreated = new Date().toISOString().slice(0, 19);
+        const { duration } = req.body;
+        connection.query('INSERT INTO sleep_log (child_id, duration) VALUES (?, ?)',
+        [childId, duration]);
         res.status(201).json({
-            id: '1',
-            message: 'test name created'
+            id: childId,
+            message: 'sleep log successfuly created'
         });
-    } catch (error){
+    }
+    catch (error){
         res.status(500).json({
             error: 'Internal server error'
         });
     }
 }
 
-module.exports = {addTestHandler, addSleepLogsHandler, addFoodIntakeLogsHandler}
+const getSleepLogsHandler = (req, res) => {
+    try {
+        const { childId } = req.params;
+        connection.query(
+            'SELECT * FROM sleep_log WHERE child_id = ?',
+            [childId],
+            (error, results) => {
+                if (error) {
+                    res.status(500).json({ error: 'Database error' });
+                } else if (results.length === 0) {
+                    res.status(404).json({ error: 'Sleep log not found' });
+                } else {
+                    res.status(200).json({
+                        id: childId,
+                        data: results,
+                    });
+                }
+            }
+        );
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+const getSleepLogByIdHandler = (req, res) => {
+    try {
+        const { childId, logId } = req.params;
+        connection.query(
+            'SELECT * FROM sleep_log WHERE child_id = ? AND log_id = ?',
+            [childId, logId],
+            (error, results) => {
+                if (error) {
+                    res.status(500).json({ error: 'Database error' });
+                } else if (results.length === 0) {
+                    res.status(404).json({ error: 'Sleep log not found' });
+                } else {
+                    res.status(200).json({
+                        id: childId,
+                        data: results,
+                    });
+                }
+            }
+        );
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+// const addTestHandler = (req, res) => {
+//     try {
+//         const nama = req.body.nama;
+//         res.status(200).send('ok')
+//         const result = connection.query('INSERT INTO test (nama) VALUES (?)', nama);
+//         // console.log(result)
+//         res.status(201).json({
+//             id: '1',
+//             message: 'test name created',
+//             result: result
+//         });
+//     } catch (error){
+//         res.status(500).json({
+//             error: 'Internal server error'
+//         });
+//     }
+// }
+
+module.exports = {addSleepLogsHandler, addFoodIntakeLogsHandler, getFoodIntakeLogsHandler, getFoodIntakeLogsByIdHandler,
+getSleepLogsHandler, getSleepLogByIdHandler}
