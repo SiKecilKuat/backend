@@ -13,7 +13,6 @@ const connection = mysql.createConnection({
 const addFoodIntakeLogsHandler = (req, res) => {
     try {
         const { childId } = req.params;
-        //const dtcreated = new Date().toISOString().slice(0, 19);
         const { mealType, foodItem,  calories } = req.body;
         connection.query('INSERT INTO food_intake_log (child_id, meal_type, food_item, calories) VALUES (?, ?, ?, ?)',
         [childId, mealType, foodItem, calories]);
@@ -81,7 +80,6 @@ const getFoodIntakeLogsByIdHandler = (req, res) => {
 const addSleepLogsHandler = (req, res) => {
     try{
         const { childId } = req.params;
-        //const dtcreated = new Date().toISOString().slice(0, 19);
         const { duration } = req.body;
         connection.query('INSERT INTO sleep_log (child_id, duration) VALUES (?, ?)',
         [childId, duration]);

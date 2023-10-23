@@ -1,6 +1,6 @@
 const { express } = require('../../app');
 const router = express.Router();
-const {addSleepLogsHandler, addFoodIntakeLogsHandler, getSleepLogsHandler, getSleepLogByIdHandler, getFoodIntakeLogsByIdHandler, getFoodIntakeLogsHandler} = require('../controllers/handler')
+const {addSleepLogsHandler, addFoodIntakeLogsHandler, getSleepLogsHandler, getSleepLogByIdHandler, getFoodIntakeLogsByIdHandler, getFoodIntakeLogsHandler} = require('../controllers/logHandler')
 
 
 // Menampilkan log makanan
