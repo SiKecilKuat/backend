@@ -17,7 +17,7 @@ const addFoodIntakeLogsHandler = (req, res) => {
         connection.query('INSERT INTO food_intake_log (child_id, meal_type, food_item, calories) VALUES (?, ?, ?, ?)',
         [childId, mealType, foodItem, calories]);
         res.status(201).json({
-            id: childId,
+            childId: childId,
             message: 'food intake log successfuly created'
         });
     } catch {
@@ -51,7 +51,7 @@ const getFoodIntakeLogsHandler = (req, res) => {
     }
 }
 
-const getFoodIntakeLogsByIdHandler = (req, res) => {
+const getFoodIntakeLogByIdHandler = (req, res) => {
     try {
         const { childId, logId } = req.params;
         connection.query(
@@ -75,6 +75,24 @@ const getFoodIntakeLogsByIdHandler = (req, res) => {
     }
 }
 
+const deleteFoodIntakeLogByIdHandler = (req, res) => {
+    const { logId } = req.params;
+    connection.query('DELETE FROM food_intake_log WHERE log_id = ?',
+    [logId],
+    (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Database error' });
+        } else if (results.affectedRows === 0) {
+            res.status(404).json({ error: 'Food intake log not found' });
+        } else {
+            res.status(200).json({
+                logId: logId,
+                message: 'Log deleted successfully'
+            });
+        }
+    })
+}
+
 // Sleep log Handlers
 
 const addSleepLogsHandler = (req, res) => {
@@ -84,7 +102,7 @@ const addSleepLogsHandler = (req, res) => {
         connection.query('INSERT INTO sleep_log (child_id, duration) VALUES (?, ?)',
         [childId, duration]);
         res.status(201).json({
-            id: childId,
+            childId: childId,
             message: 'sleep log successfuly created'
         });
     }
@@ -126,6 +144,7 @@ const getSleepLogByIdHandler = (req, res) => {
             'SELECT * FROM sleep_log WHERE child_id = ? AND log_id = ?',
             [childId, logId],
             (error, results) => {
+                console.log(results)
                 if (error) {
                     res.status(500).json({ error: 'Database error' });
                 } else if (results.length === 0) {
@@ -143,6 +162,24 @@ const getSleepLogByIdHandler = (req, res) => {
     }
 };
 
+const deleteSleepLogByIdHandler = (req, res) => {
+    const { logId } = req.params;
+    connection.query('DELETE FROM sleep_log WHERE log_id = ?',
+    [logId],
+    (error, results) => {
+        console.log(results)
+        if (error) {
+            res.status(500).json({ error: 'Database error' });
+        } else if (results.affectedRows === 0) {
+            res.status(404).json({ error: 'Sleep log not found' });
+        } else {
+            res.status(200).json({
+                logId: logId,
+                message: 'Log deleted successfully'
+            });
+        }
+    })
+}
 
 // const addTestHandler = (req, res) => {
 //     try {
@@ -162,5 +199,5 @@ const getSleepLogByIdHandler = (req, res) => {
 //     }
 // }
 
-module.exports = {addSleepLogsHandler, addFoodIntakeLogsHandler, getFoodIntakeLogsHandler, getFoodIntakeLogsByIdHandler,
-getSleepLogsHandler, getSleepLogByIdHandler}
+module.exports = {addSleepLogsHandler, addFoodIntakeLogsHandler, getFoodIntakeLogsHandler, getFoodIntakeLogByIdHandler,
+getSleepLogsHandler, getSleepLogByIdHandler, deleteFoodIntakeLogByIdHandler, deleteSleepLogByIdHandler}

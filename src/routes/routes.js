@@ -1,6 +1,8 @@
 const { express } = require('../../app');
 const router = express.Router();
-const {addSleepLogsHandler, addFoodIntakeLogsHandler, getSleepLogsHandler, getSleepLogByIdHandler, getFoodIntakeLogsByIdHandler, getFoodIntakeLogsHandler} = require('../controllers/logHandler')
+const {addSleepLogsHandler, addFoodIntakeLogsHandler, getSleepLogsHandler,
+  getSleepLogByIdHandler, getFoodIntakeLogByIdHandler, getFoodIntakeLogsHandler,
+  deleteFoodIntakeLogByIdHandler, deleteSleepLogByIdHandler} = require('../controllers/logHandler')
 
 
 // Menampilkan log makanan
@@ -9,7 +11,7 @@ router.get('/child-data/:childId/food-intake-logs', (req, res) => {
 });
 
 router.get('/child-data/:childId/food-intake-logs/:logId', (req, res) => {
-  getFoodIntakeLogsByIdHandler(req, res);
+  getFoodIntakeLogByIdHandler(req, res);
 });
 
 // Menampilkan log tidur
@@ -30,6 +32,18 @@ router.post('/child-data/:childId/food-intake-logs' ,(req, res) => {
 router.post('/child-data/:childId/sleep-logs' ,(req, res) => {
   addSleepLogsHandler(req, res);
 });
+
+// Menghapus log makan
+router.delete('/child-data/:childId/food-intake-logs/:logId', (req, res) => {
+  deleteFoodIntakeLogByIdHandler(req, res);
+});
+
+// Menghapus log tidur
+router.delete('/child-data/:childId/sleep-logs/:logId', (req, res) => {
+  deleteSleepLogByIdHandler(req, res);
+});
+
+
 
 // // Menambah test name
 // router.post('/test', (req, res) => {
