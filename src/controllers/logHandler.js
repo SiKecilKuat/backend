@@ -1,3 +1,4 @@
+const service = require('../services/service');
 // const connection = require('../../server')
 const mysql = require('mysql2');
 
@@ -118,14 +119,14 @@ const deleteFoodIntakeLogByIdHandler = (req, res) => {
 const addSleepLogsHandler = (req, res) => {
     try{
         const { childId } = req.params;
-        const { duration } = req.body;
-        
-        if (!duration) {
-            res.status(400).json({ error: 'Invalid request body. Please provide sleep duration.' })
+        const { sleepStart, sleepEnd } = req.body;
+        if (!sleepStart || !sleepEnd) {
+            res.status(400).json({ error: 'Invalid request body. Please provide sleep start and end time.' })
         };
 
-        connection.query('INSERT INTO sleep_log (child_id, duration) VALUES (?, ?)',
-        [childId, duration],
+        const durationInMinutes = service.calculateDurationInMinutes(sleepStart, sleepEnd);
+        connection.query('INSERT INTO sleep_log (child_id, sleep_start, sleep_end, duration) VALUES (?, ?, ?, ?)',
+        [childId, sleepStart, sleepEnd, durationInMinutes],
         (error) => {
             if(error){
                 res.status(500).json({error: 'Database error'});
