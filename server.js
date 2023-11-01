@@ -2,7 +2,18 @@ require('dotenv').config();
 const mysql = require('mysql2');
 
 const { app, express } = require('./app');
-const routes = require('./src/routes/routes');
+
+// Import route files
+const userRoutes = require('./src/routes/userRoutes');
+const logRoutes = require('./src/routes/logRoutes');
+
+
+// Kombinasi menjadi satu group route
+const router = express.Router();
+
+// Use the Routes
+router.use('/', userRoutes);
+router.use('/', logRoutes);
 
 // Creating connection to MySQL
 const connection = mysql.createConnection({
@@ -22,11 +33,11 @@ connection.connect((err) => {
 });
 
 app.use(express.json());
-app.use('/', routes);
+app.use('/', router);
 
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server running at port ${port}`);
 });
 
-//module.exports =  { connection };
+module.exports =  { connection, router };
