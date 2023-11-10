@@ -1,3 +1,5 @@
+const { format, parseISO } = require('date-fns');
+
 function calculateDurationInMinutes(start, end) {
     // Calculate the duration in minutes here and return the result.
     const startTime = new Date(start);
@@ -7,4 +9,9 @@ function calculateDurationInMinutes(start, end) {
     return durationInMinutes;
 };
 
-module.exports = {calculateDurationInMinutes};
+function dateConverter(date) {
+    const formattedDate = format(parseISO(date), 'yyyy-MM-dd');
+    return formattedDate
+}
+
+module.exports = {calculateDurationInMinutes, dateConverter};
