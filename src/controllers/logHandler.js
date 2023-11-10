@@ -220,23 +220,43 @@ const deleteSleepLogByIdHandler = (req, res) => {
     
 }
 
-// const addTestHandler = (req, res) => {
-//     try {
-//         const nama = req.body.nama;
-//         res.status(200).send('ok')
-//         const result = connection.query('INSERT INTO test (nama) VALUES (?)', nama);
-//         // console.log(result)
-//         res.status(201).json({
-//             id: '1',
-//             message: 'test name created',
-//             result: result
-//         });
-//     } catch (error){
-//         res.status(500).json({
-//             error: 'Internal server error'
-//         });
-//     }
-// }
+const dbHealthCheckHandler = (req, res) => {
+    try {
+        // Generate a random name based on the current timestamp
+        const timestamp = Date.now();
+        const nama = `RandomName_${timestamp}`;
+
+        // Use the connection.query function with a callback
+        connection.query('INSERT INTO test (nama) VALUES (?)',
+        [nama],
+        (error, result) => {
+            if (error) {
+                console.error('Error inserting data into test table:', error);
+                res.status(500).json({ error: 'Database error' });
+            } else {
+                console.log('Data inserted into test table:', result);
+
+                // Send a response after the database operation is complete
+                res.status(201).json({
+                    id: result.insertId,
+                    message: 'Test name created',
+                    result: result
+                });
+            }
+        });
+
+    } catch (error) {
+        console.error('Error in try-catch block:', error);
+        res.status(500).json({
+            error: 'Internal server error'
+        });
+    }
+};
+
+const healthCheckHandler = (req, res) => {
+    res.json({message: 'Healthy!!'})
+}
 
 module.exports = {addSleepLogsHandler, addFoodIntakeLogsHandler, getFoodIntakeLogsHandler, getFoodIntakeLogByIdHandler,
-getSleepLogsHandler, getSleepLogByIdHandler, deleteFoodIntakeLogByIdHandler, deleteSleepLogByIdHandler}
+getSleepLogsHandler, getSleepLogByIdHandler, deleteFoodIntakeLogByIdHandler, deleteSleepLogByIdHandler, dbHealthCheckHandler,
+healthCheckHandler};

@@ -2,7 +2,7 @@ const { express } = require('../../app');
 const router = express.Router();
 const {addSleepLogsHandler, addFoodIntakeLogsHandler, getSleepLogsHandler,
   getSleepLogByIdHandler, getFoodIntakeLogByIdHandler, getFoodIntakeLogsHandler,
-  deleteFoodIntakeLogByIdHandler, deleteSleepLogByIdHandler} = require('../controllers/logHandler')
+  deleteFoodIntakeLogByIdHandler, deleteSleepLogByIdHandler, dbHealthCheckHandler, healthCheckHandler} = require('../controllers/logHandler')
 
 
 // Menampilkan log makanan
@@ -45,10 +45,16 @@ router.delete('/child-data/:childId/sleep-logs/:logId', (req, res) => {
 
 
 
-// // Menambah test name
-// router.post('/test', (req, res) => {
-//   addTestHandler(req, res);
-// })
+// Check connection backend
+router.post('/health', (req, res) => {
+  healthCheckHandler(req, res);
+});
+
+// Check connection ke DB
+router.post('/health/db', (req, res) => {
+  dbHealthCheckHandler(req, res);
+});
+
 
 // Page Not Found Route (404)
 router.get('*', (req, res) => {
