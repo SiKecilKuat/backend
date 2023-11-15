@@ -84,12 +84,14 @@ const editParentByIdHandler = (req, res) => {
 
 const addChildHandler = (req, res) => {
     try {
-        const { name, birthDate, gender } = req.body; // brithDate format yyyy-MM-dd
+        const { name, birthDate, gender, birthPlace, orderOfBirth, weight } = req.body; // brithDate format yyyy-MM-dd
         const { parentId } = req.params;
         connection.query(
-            'INSERT INTO child (name, parent_id, birth_date, gender) VALUES (?, ?, ?, ?)',
-            [name, parentId, birthDate, gender],
+           
+            'INSERT INTO child (name, parent_id, birth_date, gender, birth_place, order_of_birth, weight) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [name, parentId, birthDate, gender, birthPlace, orderOfBirth, weight],
             (error, result) => {
+                console.log(gender)
                 if (error) {
                     res.status(500).json({ error: 'Database error' });
                 } else {
@@ -128,7 +130,7 @@ const getChildByIdHandler = (req, res) => {
     try {
         const { childId } = req.params;
         connection.query(
-            'SELECT * FROM child WHERE id = ?',
+            'SELECT * FROM child WHERE child_id = ?',
             [childId],
             (error, results) => {
                 if (error) {
