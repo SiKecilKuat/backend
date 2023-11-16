@@ -15,7 +15,7 @@ npm run start
 - go to http://localhost:3000/
 
 ## How To Install with docker
-- Make sure you have docker desktop for windows user up and running
+- Make sure you have docker desktop for windows user, or docker engine/docker desktop for linux up and running
 - clone this repo
 - open terminal and run
 ```
