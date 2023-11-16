@@ -21,4 +21,4 @@ npm run start
 ```
 docker compose up
 ```
-- go to http://localhost:5000/
+- go to http://localhost:3000/
